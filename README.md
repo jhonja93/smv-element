@@ -1,6 +1,6 @@
 # smv-element
 
-> Data viewer with Nuxt, Element UI and Echarts
+> Data viewer with [Nuxt](https://nuxtjs.org/), [Element UI](https://element.eleme.io) and [Echarts](https://echarts.apache.org/en/index.html)
 
 Features:
  - Temporal Serie
@@ -24,5 +24,3 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
