@@ -1,6 +1,12 @@
 # smv-element
 
-> My awesome Nuxt.js project
+> Data viewer with Nuxt, Element UI and Echarts
+
+Features:
+ - Temporal Serie
+ - Choroplet (soon)
+ - Heat map (soon)
+ - BarChar (soon)
 
 ## Build Setup
 
