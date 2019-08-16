@@ -9,8 +9,12 @@ export const actions = {
     },
 
     async fetchCase ({commit}, id) {
-        let {data} = await this.$axios.$get(`/cases/${id}`)
-        commit('setCase', data)
+        let response = await this.$axios.$get(`/cases/${id}`)
+        if (response.code === 200) {
+            commit('setCase', response.data)
+        } else {
+            throw new Error('Error al obtener caso.')
+        }
     }
 }
 

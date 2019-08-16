@@ -14,7 +14,19 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js' }
+    ],
+    link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/leaflet@1.1.0/dist/leaflet.css',
+        integrity:
+          'sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw==',
+        crossorigin: ''
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color

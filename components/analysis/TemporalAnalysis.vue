@@ -13,7 +13,9 @@ import TimeSerie from "~/components/graphics/TimeSerie";
 import { Divider } from "element-ui";
 export default {
   name: "TemporalAnalisis",
-  props: ["data"],
+  props: {
+      data: {type: Object, required: true}
+  },
   components: {
     time_serie: TimeSerie,
     ElDivider: Divider

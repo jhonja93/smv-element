@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <div class="filters">
+    <!-- <div class="filters">
       <el-select v-if="groups.length" v-model="dataFilters.type" placeholder="Select">
         <el-option v-for="item in groups" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
@@ -13,9 +13,9 @@
         end-placeholder="End date"
         value-format="yyyy-MM-dd"
       ></el-date-picker>
-    </div>
-    <graphic :path="path" :params="{...params, dataFilters}" type="text" @success="handleData">
-      <div ref="barchar" :class="className" :style="{height:height,width:width, margin: '0 auto'}"></div>
+    </div>-->
+    <graphic :path="path" :params="{...params, dataFilters}" type="geo" @success="handleData">
+      <div ref="heatmap" :class="className" :style="{height:height,width:width}"></div>
     </graphic>
   </div>
 </template>
@@ -23,18 +23,19 @@
 <script>
 const echarts = require("echarts/lib/echarts");
 
-require("echarts/lib/chart/bar");
+require("echarts/lib/chart/heatmap");
+require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 require("echarts/theme/shine"); // echarts theme
-
+// require('echarts/extension/bmap/bmap');
+import "echarts-leaflet";
 import resize from "~/mixins/resize";
 import Graphic from "~/components/renderless/Graphic";
 import { DatePicker } from "element-ui";
-import { parseTime, fecha_ayer } from "~/utils";
+import { getTime, parseTime, fecha_ayer } from "~/utils";
 
 export default {
-  name: "WordCloud",
-  mixins: [resize],
+  name: "HeatMap",
   components: {
     Graphic,
     ElDatePicker: DatePicker
@@ -46,11 +47,11 @@ export default {
     },
     width: {
       type: String,
-      default: "700px"
+      default: "100%"
     },
     height: {
       type: String,
-      default: "500px"
+      default: "450px"
     },
     options: {
       type: Object,
@@ -73,11 +74,7 @@ export default {
       default: () => []
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
-  },
+  mixins: [resize],
   data() {
     return {
       chart: null,
@@ -91,15 +88,32 @@ export default {
       key: 0
     };
   },
+  mounted() {
+    this.initChart();
+  },
+  beforeDestroy() {
+    if (!this.chart) {
+      return;
+    }
+    this.chart.dispose();
+    this.chart = null;
+  },
   methods: {
     handleData({ data }) {
-      this.data = data;
+      this.data = [].concat.apply(
+        [],
+        data.map(function(track) {
+          return track.map(function(seg) {
+            return seg.coord.concat([1]);
+          });
+        })
+      );
       this.$nextTick(() => {
         this.setData();
       });
     },
     initChart() {
-      this.chart = echarts.init(this.$refs.barchar, "shine");
+      this.chart = echarts.init(this.$refs.heatmap, "shine");
       this.chart.showLoading();
     },
     dimesions() {
@@ -107,41 +121,48 @@ export default {
         typeof this.options.dimesions === "object" &&
         this.options.dimesions.length > 1
         ? this.options.dimesions
-        : ["x", "y"];
+        : ["date", "value"];
     },
     setData() {
       if (this.chart) {
         this.chart.setOption({
-          title: {
-            text: this.options.title,
-            left: "center",
-            right: "center",
-            textStyle: {
-              color: "#00000073",
-              width: "100%",
-              fontSize: 14,
-              fontWeight: "bold",
-              lineHeight: 18,
-              width: "100%"
+          animation: false,
+          leaflet: {
+            center: [120.13066322374, 30.240018034923],
+            zoom: 14,
+            roam: true,
+            tiles: [
+              {
+                label: "OpenStreetMap",
+                urlTemplate:
+                  "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+                options: {
+                  attribution:
+                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+                }
+              }
+            ]
+          },
+          visualMap: {
+            show: false,
+            top: "top",
+            min: 0,
+            max: 5,
+            seriesIndex: 0,
+            calculable: true,
+            inRange: {
+              color: ["blue", "blue", "green", "yellow", "red"]
             }
           },
-          xAxis: {
-            type: "category",
-            name: this.options.xlabel,
-            nameLocation: "center",
-            nameGap: 30
-          },
-          yAxis: {
-            type: "value",
-            name: this.options.ylabel,
-            nameLocation: "center",
-            nameGap: 30
-          },
-          dataset: {
-            dimesions: [this.dimesions()],
-            source: this.data
-          },
-          series: [{ type: "bar" }]
+          series: [
+            {
+              type: "heatmap",
+              coordinateSystem: "leaflet",
+              data: this.data,
+              pointSize: 5,
+              blurSize: 6
+            }
+          ]
         });
         this.chart.hideLoading();
       }
@@ -151,4 +172,10 @@ export default {
 </script>
 
 <style>
+.filters {
+  display: flex;
+}
+.filters .el-date-editor {
+  margin-left: auto;
+}
 </style>

@@ -1,11 +1,12 @@
 <template>
   <div class="p-3">
     <div class="filters">
-      <el-select v-if="groups.length" v-model="filters.type" placeholder="Select">
+      <el-select v-if="groups.length" v-model="dataFilters.type" placeholder="Select">
         <el-option v-for="item in groups" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <el-date-picker
-        v-model="filters.range"
+        v-if="filters['date']"
+        v-model="dataFilters.range"
         type="daterange"
         range-separator="To"
         start-placeholder="Start date"
@@ -13,7 +14,7 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>
     </div>
-    <graphic :path="path" :params="{...params, filters}" type="temporal" @success="handleData">
+    <graphic :path="path" :params="{...params, dataFilters}" type="temporal" @success="handleData">
       <div ref="chart" :class="className" :style="{height:height,width:width}"></div>
     </graphic>
   </div>
@@ -30,6 +31,7 @@ require("echarts/theme/shine"); // echarts theme
 import resize from "~/mixins/resize";
 import Graphic from "~/components/renderless/Graphic";
 import { DatePicker } from "element-ui";
+import { getTime, parseTime, fecha_ayer } from "~/utils";
 
 export default {
   name: "TimeSerie",
@@ -54,6 +56,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    filters: {
+      type: Object,
+      default: () => ({})
+    },
     path: {
       type: String,
       required: true
@@ -72,7 +78,7 @@ export default {
     return {
       chart: null,
       filters: {
-        range: [this.fecha_ayer(), this.formatDate(new Date())],
+        range: [fecha_ayer(), parseTime(new Date())],
         type: null
       },
       data: null,
@@ -80,9 +86,7 @@ export default {
     };
   },
   mounted() {
-    // this.$nextTick(() => {
     this.initChart();
-    // });
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -98,26 +102,16 @@ export default {
         this.setData();
       });
     },
-    fecha_ayer() {
-      var dt = new Date();
-      dt.setDate(dt.getDate() - 1);
-      return this.formatDate(dt);
-    },
-    formatDate(date) {
-      //buscamos la posición de la fecha dentro de nuestro arreglo de selección
-      let newdate = new Date(date),
-        month = "" + (newdate.getMonth() + 1),
-        day = "" + newdate.getDate(),
-        year = newdate.getFullYear();
-
-      if (month.length < 2) month = "0" + month;
-      if (day.length < 2) day = "0" + day;
-      //reescribimos el valor por el nuevo formateado en yyyy-mm-dd
-      return [year, month, day].join("-");
-    },
     initChart() {
       this.chart = echarts.init(this.$refs.chart, "shine");
       this.chart.showLoading();
+    },
+    dimesions() {
+      return this.options.dimesions &&
+        typeof this.options.dimesions === "object" &&
+        this.options.dimesions.length > 1
+        ? this.options.dimesions
+        : ["date", "value"];
     },
     setData() {
       if (this.chart) {
@@ -148,10 +142,7 @@ export default {
             }
           },
           dataset: {
-            dimesions: ["date", "value"],
-            source: []
-          },
-          dataset: {
+            dimesions: this.dimesions(),
             source: this.data
           },
           dataZoom: [

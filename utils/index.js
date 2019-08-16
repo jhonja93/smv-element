@@ -48,6 +48,12 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+export function fecha_ayer() {
+    let dt = new Date();
+    dt.setDate(dt.getDate() - 1);
+    return parseTime(dt);
+}
+
 /**
  * @param {number} time
  * @param {string} option
@@ -234,7 +240,7 @@ export function toggleClass(element, className) {
  */
 export function getTime(type) {
   if (type === 'start') {
-    return new Date().getTime() - 3600 * 1000 * 24 * 90
+    return new Date().getTime() 
   } else {
     return new Date(new Date().toDateString())
   }
