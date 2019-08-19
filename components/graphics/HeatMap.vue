@@ -1,35 +1,14 @@
 <template>
   <div class="p-3">
-    <!-- <div class="filters">
-      <el-select v-if="groups.length" v-model="dataFilters.type" placeholder="Select">
-        <el-option v-for="item in groups" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
-      <el-date-picker
-        v-if="filters['date']"
-        v-model="dataFilters.range"
-        type="daterange"
-        range-separator="To"
-        start-placeholder="Start date"
-        end-placeholder="End date"
-        value-format="yyyy-MM-dd"
-      ></el-date-picker>
-    </div>-->
     <graphic :path="path" :params="{...params, dataFilters}" type="geo" @success="handleData">
-      <div ref="heatmap" :class="className" :style="{height:height,width:width}"></div>
+      <div ref="map" style="height:400px"></div>
     </graphic>
   </div>
 </template>
 
 <script>
-const echarts = require("echarts/lib/echarts");
-
-require("echarts/lib/chart/heatmap");
-require("echarts/lib/component/tooltip");
-require("echarts/lib/component/title");
-require("echarts/theme/shine"); // echarts theme
-// require('echarts/extension/bmap/bmap');
-import "echarts-leaflet";
-import resize from "~/mixins/resize";
+import L from "leaflet";
+import "./leaflet-heat";
 import Graphic from "~/components/renderless/Graphic";
 import { DatePicker } from "element-ui";
 import { getTime, parseTime, fecha_ayer } from "~/utils";
@@ -37,8 +16,8 @@ import { getTime, parseTime, fecha_ayer } from "~/utils";
 export default {
   name: "HeatMap",
   components: {
-    Graphic,
-    ElDatePicker: DatePicker
+    ElDatePicker: DatePicker,
+    Graphic
   },
   props: {
     className: {
@@ -74,9 +53,9 @@ export default {
       default: () => []
     }
   },
-  mixins: [resize],
   data() {
     return {
+      map: null,
       chart: null,
       dataFilters: {
         range: this.filters["date"]
@@ -85,36 +64,40 @@ export default {
         type: null
       },
       data: null,
-      key: 0
+      key: 0,
+      center: [30.240018034923, 120.13066322374]
     };
   },
   mounted() {
     this.initChart();
   },
-  beforeDestroy() {
-    if (!this.chart) {
-      return;
-    }
-    this.chart.dispose();
-    this.chart = null;
-  },
+  beforeDestroy() {},
   methods: {
     handleData({ data }) {
       this.data = [].concat.apply(
         [],
         data.map(function(track) {
           return track.map(function(seg) {
-            return seg.coord.concat([1]);
+            return seg.coord.reverse().concat([1]);
           });
         })
       );
-      this.$nextTick(() => {
-        this.setData();
-      });
+
+      var heat = L.heatLayer(this.data);
+      this.map.addLayer(heat);
     },
     initChart() {
-      this.chart = echarts.init(this.$refs.heatmap, "shine");
-      this.chart.showLoading();
+      this.map = L.map(this.$refs.map).setView(this.center, 12);
+      L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(this.map);
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+        iconUrl: require("leaflet/dist/images/marker-icon.png"),
+        shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+      });
     },
     dimesions() {
       return this.options.dimesions &&
@@ -122,50 +105,6 @@ export default {
         this.options.dimesions.length > 1
         ? this.options.dimesions
         : ["date", "value"];
-    },
-    setData() {
-      if (this.chart) {
-        this.chart.setOption({
-          animation: false,
-          leaflet: {
-            center: [120.13066322374, 30.240018034923],
-            zoom: 14,
-            roam: true,
-            tiles: [
-              {
-                label: "OpenStreetMap",
-                urlTemplate:
-                  "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
-                options: {
-                  attribution:
-                    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
-                }
-              }
-            ]
-          },
-          visualMap: {
-            show: false,
-            top: "top",
-            min: 0,
-            max: 5,
-            seriesIndex: 0,
-            calculable: true,
-            inRange: {
-              color: ["blue", "blue", "green", "yellow", "red"]
-            }
-          },
-          series: [
-            {
-              type: "heatmap",
-              coordinateSystem: "leaflet",
-              data: this.data,
-              pointSize: 5,
-              blurSize: 6
-            }
-          ]
-        });
-        this.chart.hideLoading();
-      }
     }
   }
 };
