@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="box grow">
     <div class="grid">
       <caso v-for="c in casos" :key="c._id" :caso="c"/>
     </div>

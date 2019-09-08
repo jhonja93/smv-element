@@ -30,47 +30,5 @@ export default {
 </script>
 
 <style>
-.header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 1.5rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  background-color: white;
-  border-bottom: 1px solid #dee2e6;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.header .navbar-brand {
-  margin-bottom: 0;
-  margin-top: 0;
-  font-weight: normal;
-  text-decoration: none;
-  color: inherit;
-  margin-right: auto;
-}
-
-.header nav {
-  margin-right: 1rem;
-  margin-bottom: 0;
-  margin-bottom: 0;
-}
-
-@media (min-width: 768px) {
-  .header {
-    flex-direction: row !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .header {
-    padding-right: 1.5rem !important;
-  }
-}
-
-a {
-  text-decoration: none;
-}
 </style>
 

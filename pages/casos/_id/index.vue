@@ -1,6 +1,6 @@
 <template>
   <div class="analysis-list">
-    <div v-for="(value, name, index) in caso" :key="index">
+    <div v-for="(value, name, index) in caso" :key="index" class="caso">
       <template v-if="name.includes('analysis') && value.enabled">
         <div>
           <Analysis :type="name" :analysis="value" />
@@ -50,7 +50,13 @@ export default {
 <style>
 .analysis-list {
     display: flex;
+    width: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    align-content: flex-start;
     justify-content: space-evenly;
-    align-items: center;
+}
+.analysis-list .caso {
+  margin: 10px;
 }
 </style>

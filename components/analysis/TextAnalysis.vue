@@ -1,11 +1,19 @@
 <template>
-  <div class="my-3">
-    <h2>TextAnalysis</h2>
-    <div v-for="(viz, index) in data.viz" :key="index">
-      <component v-bind:is="viz.type" :options="viz.options" :filters="viz.filters" :path="viz.path" :params="viz.params"></component>
-      <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
-    </div>
-  </div>
+  <el-row :gutter="20">
+    <el-col>
+      <h2>TextAnalysis</h2>
+      <div v-for="(viz, index) in data.viz" :key="index">
+        <component
+          v-bind:is="viz.type"
+          :options="viz.options"
+          :filters="viz.filters"
+          :path="viz.path"
+          :params="viz.params"
+        ></component>
+        <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
+      </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>

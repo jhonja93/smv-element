@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-    <component v-if="analysis" :data="analysis" v-bind:is="component"></component>
-  </div>
+  <component v-if="analysis" :data="analysis" v-bind:is="component"></component>
 </template> 
 
 <script>
