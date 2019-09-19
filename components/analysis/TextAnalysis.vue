@@ -1,8 +1,11 @@
 <template>
-  <el-row :gutter="20">
-    <el-col>
-      <h2>TextAnalysis</h2>
-      <div v-for="(viz, index) in data.viz" :key="index">
+  <div>
+    <el-row>
+      <h2 class="analysis-title">Text Analisis</h2>
+      <hr />
+    </el-row>
+    <el-row>
+      <el-col v-for="(viz, index) in data.viz" :key="index">
         <component
           v-bind:is="viz.type"
           :options="viz.options"
@@ -11,9 +14,9 @@
           :params="viz.params"
         ></component>
         <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
-      </div>
-    </el-col>
-  </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>

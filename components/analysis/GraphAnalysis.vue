@@ -1,15 +1,17 @@
 <template>
-    <div class="my-3">
-        <h2>Graph Analisis</h2>
-    </div>
+  <div>
+    <el-row>
+      <h2 class="analysis-title">Graph Analisis</h2>
+      <hr />
+    </el-row>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'GraphAnalisis'
-}
+  name: "GraphAnalisis"
+};
 </script>
 
 <style>
-
 </style>

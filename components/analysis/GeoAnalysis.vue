@@ -1,10 +1,17 @@
 <template>
-  <div class="my-3">
-    <h2>Geographical Analisis</h2>
-    <div v-for="(viz, index) in data.viz" :key="index">
-      <component v-bind:is="viz.type" :options="viz.options" :map="viz.map" :path="viz.path" :params="viz.params"></component>
-      <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
-    </div>
+  <div>
+    <el-row>
+      <h2 class="analysis-title">Geographical Analisis</h2>
+      <hr>
+    </el-row>
+    <el-row>
+      <el-col v-for="(viz, index) in data.viz" :key="index">
+        <div class="card-small mb-4 card">
+          <component v-bind:is="viz.type" :options="viz.options" :map="viz.map" :path="viz.path" :params="viz.params"></component>
+        </div>
+        <!-- <el-divider v-if="index !== (data.viz.length - 1)"></el-divider> -->
+      </el-col>
+    </el-row>
   </div>
 </template>
 

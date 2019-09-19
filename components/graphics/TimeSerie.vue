@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       chart: null,
-      filters: {
+      dataFilters: {
         range: [fecha_ayer(), parseTime(new Date())],
         type: null
       },
