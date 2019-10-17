@@ -6,7 +6,7 @@
 import TextAnalysis from "~/components/analysis/TextAnalysis";
 import GeoAnalysis from "~/components/analysis/GeoAnalysis";
 import TemporalAnalysis from "~/components/analysis/TemporalAnalysis";
-import GraphAnalysis from "~/components/analysis/GraphAnalysis";
+import NetworkAnalysis from "~/components/analysis/NetworkAnalysis";
 
 export default {
   name: "AnalysisId",
@@ -14,7 +14,7 @@ export default {
     TextAnalysis,
     GeoAnalysis,
     TemporalAnalysis,
-    GraphAnalysis
+    NetworkAnalysis
   },
   data() {
     return {
@@ -39,8 +39,8 @@ export default {
       case "temporal_analysis":
         component = "temporal-analysis";
         break;
-      case "graph_analysis":
-        component = "graph-analysis";
+      case "network_analysis":
+        component = "network-analysis";
         break;
       case "geo_analysis":
         component = "geo-analysis";
@@ -68,9 +68,6 @@ export default {
       if (caso) {
         return caso[this.$route.params.analysis];
       } else {
-        // this.$router.push({
-        //   name: "index"
-        // });
         return false;
       }
     }

@@ -3,10 +3,10 @@
 > Data viewer with [Nuxt](https://nuxtjs.org/), [Element UI](https://element.eleme.io) and [Echarts](https://echarts.apache.org/en/index.html)
 
 Features:
- - Temporal Serie
- - Choroplet (soon)
- - Heat map (soon)
- - BarChar (soon)
+    - Temporal Serie
+    - Choroplet (soon)
+    - Heat map (soon)
+    - BarChar (soon)
 
 ## Build Setup
 

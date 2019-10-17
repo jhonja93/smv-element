@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <graphic :path="path" :params="{...params, dataFilters}" type="geo" @success="handleData">
+    <graphic :path="path" :params="{...params, filters: dataFilters}" type="geo" @success="handleData">
       <div ref="map" style="height:400px"></div>
     </graphic>
   </div>

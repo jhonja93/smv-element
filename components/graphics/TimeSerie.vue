@@ -14,7 +14,7 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>
     </div>
-    <graphic :path="path" :params="{...params, dataFilters}" type="temporal" @success="handleData">
+    <graphic :path="path" :params="{...params, filters: dataFilters}" type="temporal" @success="handleData">
       <div ref="chart" :class="className" :style="{height:height,width:width}"></div>
     </graphic>
   </div>
@@ -78,7 +78,8 @@ export default {
     return {
       chart: null,
       dataFilters: {
-        range: [fecha_ayer(), parseTime(new Date())],
+        // range: [fecha_ayer(), parseTime(new Date())],
+        range: null,
         type: null
       },
       data: null,

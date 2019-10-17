@@ -14,7 +14,7 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>
     </div>
-    <graphic :path="path" :params="{...params, dataFilters}" type="text" @success="handleData">
+    <graphic :path="path" :params="{...params, filters: dataFilters}" type="text" @success="handleData">
       <div ref="barchar" :class="className" :style="{height:height,width:width, margin: '0 auto'}"></div>
     </graphic>
   </div>
@@ -33,7 +33,7 @@ import { DatePicker } from "element-ui";
 import { parseTime, fecha_ayer } from "~/utils";
 
 export default {
-  name: "WordCloud",
+  name: "BarChar",
   mixins: [resize],
   components: {
     Graphic,

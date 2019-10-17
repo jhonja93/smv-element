@@ -6,14 +6,16 @@
     </el-row>
     <el-row>
       <el-col v-for="(viz, index) in data.viz" :key="index">
-        <component
-          v-bind:is="viz.type"
-          :options="viz.options"
-          :filters="viz.filters"
-          :path="viz.path"
-          :params="viz.params"
-        ></component>
-        <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
+        <div class="card-small mb-4 card">
+          <component
+            v-bind:is="viz.type"
+            :options="viz.options"
+            :filters="viz.filters"
+            :path="viz.path"
+            :params="viz.params"
+          ></component>
+          <el-divider v-if="index !== (data.viz.length - 1)"></el-divider>
+        </div>
       </el-col>
     </el-row>
   </div>

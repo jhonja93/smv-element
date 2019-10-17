@@ -10,6 +10,7 @@
           <component
             v-bind:is="viz.type"
             :options="viz.options"
+            :filters="viz.filters"
             :path="viz.path"
             :params="viz.params"
           ></component>

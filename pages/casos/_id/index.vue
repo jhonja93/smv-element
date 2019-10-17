@@ -29,7 +29,7 @@ export default {
       try {
         await store.dispatch("casos/fetchCase", params.id);
       } catch (e) {
-        error({ statusCode: 404, message: "Case not found" });
+        error({ statusCode: 404, message: "Caso no encontrado!" });
       }
     }
   },

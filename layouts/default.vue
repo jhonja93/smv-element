@@ -19,21 +19,21 @@
       </div>
     </div>
     <el-container class="container flex column box grow">
-      <el-header class="header">
+      <!-- <el-header class="header">
         <div class="toolbar flex align-center justify-space-between">
           <div class="box-left box grow flex"></div>
           <div class="toggle-sidebar card-base card-shadow--small"></div>
         </div>
-        <!-- <top-nav /> -->
-      </el-header>
+        <top-nav />
+      </el-header> -->
       <el-main class="ps-container main box grow flex">
-        <!-- <el-button
+        <el-button
           class="btn-back"
           v-if="$route.path !== '/'"
           @click="$router.back()"
           icon="el-icon-back"
           circle
-        /> -->
+        />
         <section class="page-crypto-dashboard view box grow">
           <nuxt />
         </section>
@@ -173,6 +173,7 @@ html:not(.ie) .layout-container .container {
   position: relative;
   overflow: hidden;
   padding: 0 30px;
+  margin-top: 10px;
 }
 .layout-container .container .main {
   position: relative;
@@ -211,7 +212,7 @@ html:not(.ie) .layout-container .container {
 .vertical-nav .sidebar .box-nav {
   overflow: hidden;
   padding-top: 15px;
-  border-right: 1px solid gainsboro;
+  /* border-right: 1px solid gainsboro; */
 }
 .vertical-nav .sidebar .box-nav .scroll-nav {
   height: 100%;
@@ -282,7 +283,7 @@ html:not(.ie) .layout-container .container {
   position: absolute;
   top: 0;
   z-index: 10;
-  left: 0px;
+  left: 25px;
 }
 .analysis-title {
   color: #949799;

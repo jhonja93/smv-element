@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <h2 class="analysis-title">Geographical Analisis</h2>
+      <h2 class="analysis-title">Network Analisis</h2>
       <hr />
     </el-row>
     <el-row>
@@ -16,18 +16,17 @@
 </template>
 
 <script>
-import HeatMap from "~/components/graphics/HeatMap";
-import Choroplet from "~/components/graphics/Choroplet";
+import Graph from "~/components/graphics/Graph";
 import { Divider } from "element-ui";
+
 export default {
-  name: "GeoAnalisis",
+  name: "NetworkAnalisis",
   props: {
-      data: {type: Object, required: true}
+    data: { type: Object, required: true }
   },
   components: {
-    heatmap: HeatMap,
-    ElDivider: Divider,
-    choroplet: Choroplet
+    graph: Graph,
+    ElDivider: Divider
   }
 };
 </script>

@@ -24,7 +24,7 @@ export default {
         case "text_analysis":
           nombre = "Text analysis";
           break;
-        case "graph_analysis":
+        case "network_analysis":
           nombre = "Network analysis";
           break;
       }
