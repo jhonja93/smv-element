@@ -18,8 +18,15 @@
             <el-slider v-model="zoom"></el-slider>
         </div>
         <client-only placeholder="Cargando...">
-            <graphic :path="path" type="text" @success="handleData">
-                <d3-network :net-nodes="data.nodes" :net-links="data.links" :options="opciones" />
+            <graphic :path="path" type="text" @success="handleData" draggable="true" @dragstart.native="handleDragStart">
+                <d3-network
+                    :net-nodes="data.nodes"
+                    :net-links="data.links"
+                    :options="opciones"
+                    @wheel.native="handleWheel"
+                    @dragover.native="handleDragEnd"
+                    class="graphic"
+                />
             </graphic>
         </client-only>
     </div>
@@ -50,14 +57,14 @@ export default {
             type: String,
             default: "chart"
         },
-        width: {
-            type: String,
-            default: "700px"
-        },
-        height: {
-            type: String,
-            default: "500px"
-        },
+        // width: {
+        //     type: String,
+        //     default: "700px"
+        // },
+        // height: {
+        //     type: String,
+        //     default: "500px"
+        // },
         options: {
             type: Object,
             default: () => ({})
@@ -82,11 +89,18 @@ export default {
     computed: {
         opciones() {
             return {
-                force: this.zoom * 30,
+                force: this.zoom * 40,
                 nodeSize: 20,
                 nodeLabels: true,
-                linkWidth: 5,
+                linkWidth: 2,
+                size: this.windowSize,
                 ...this.options
+            };
+        },
+        windowSize() {
+            return {
+                w: process.client ? window.innerWidth * 0.75 : 600,
+                h: process.client ? window.innerHeight * 0.83 : 500
             };
         }
     },
@@ -107,10 +121,50 @@ export default {
     methods: {
         handleData({ data }) {
             this.data = data;
+        },
+        handleWheel(e) {
+            if (e.deltaY < 0) {
+                this.zoom = this.zoom <= 100 ? this.zoom + 2 : 100;
+            } else if (e.deltaY > 0) {
+                this.zoom = this.zoom >= 0 ? this.zoom - 2 : 0;
+            }
+        },
+        handleDragStart(e) {
+            console.log(e);
+        },
+        handleDragEnd(e) {
+            var dragX = e.pageX,
+                dragY = e.pageY;
+
+            console.log("X: " + dragX + " Y: " + dragY);
         }
+        // handleWheel: _.debounce(function(e) {
+        //     if (e.deltaY < 0) {
+        //         this.zoom = this.zoom <= 100 ? this.zoom + 1 : 100;
+        //     } else if (e.deltaY > 0) {
+        //         this.zoom = this.zoom >= 0 ? this.zoom - 1 : 0;
+        //     }
+        // }, 10, {leading: true})
     }
 };
 </script>
 
 <style>
+.links {
+    list-style: none;
+}
+.link {
+    stroke: rgba(18, 120, 98, 0.3);
+}
+.link,
+.node {
+    stroke-linecap: round;
+}
+.node {
+    -webkit-transition: fill 0.5s ease;
+    fill: #dcfaf3;
+    stroke: rgba(18, 120, 98, 0.7);
+    stroke-width: 3px;
+    transition: fill 0.5s ease;
+}
 </style>

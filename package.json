@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "My awesome Nuxt.js project",
   "author": "Jhon",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
@@ -16,6 +16,7 @@
     "echarts-wordcloud": "^1.1.3",
     "element-ui": "^2.12.0",
     "leaflet": "^1.5.1",
+    "lodash": "^4.17.15",
     "nuxt": "^2.10.1",
     "perfect-scrollbar": "^1.4.0",
     "randomcolor": "^0.5.4",

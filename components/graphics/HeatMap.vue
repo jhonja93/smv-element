@@ -10,11 +10,8 @@
 import Graphic from "~/components/renderless/Graphic";
 import { DatePicker } from "element-ui";
 import { getTime, parseTime, fecha_ayer } from "~/utils";
-// import L from "leaflet";
-// import "./leaflet-heat";
 
-const isBrowser = typeof window !== "undefined";
-if (isBrowser) {
+if (process.client) {
   let L = require('leaflet');
   require('./leaflet-heat')
 }

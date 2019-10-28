@@ -1,3 +1,5 @@
+import webpack from 'webpack';
+
 export default {
   mode: 'universal',
   /*
@@ -62,6 +64,11 @@ export default {
    */
   build: {
     transpile: [/^element-ui/],
+    plugins: [
+      new webpack.ProvidePlugin({
+        '_': 'lodash'
+      })
+    ],
     /*
      ** You can extend webpack config here
      */
